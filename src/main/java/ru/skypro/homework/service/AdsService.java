@@ -21,4 +21,6 @@ public interface AdsService {
 
     Ads getAdsMe();
 
+    byte[] updateImage(Integer id, MultipartFile image);
+
 }

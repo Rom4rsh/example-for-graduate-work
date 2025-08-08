@@ -8,12 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.NoSuchElementException;
+
+import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -89,9 +92,11 @@ public class AdsController {
 
     @Operation(summary = "Обновление картинки пользователя")
     @PatchMapping("/{id}/image")
-    ResponseEntity<?> updateImage(@RequestPart MultipartFile image, @PathVariable Integer id) {
-        try {
+    ResponseEntity<byte[]> updateImage(@RequestPart MultipartFile image, @PathVariable Integer id) {
 
+        try {
+            byte[] updateImage = adsService.updateImage(id, image);
+            return ResponseEntity.ok(updateImage);
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (SecurityException e) {

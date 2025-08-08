@@ -79,6 +79,17 @@ public class AdsServiceImpl implements AdsService {
         return new Ad();
     }
 
+    @Override
+    public Ads getAdsMe() {
+        return null;
+    }
+
+    @Override
+    public byte[] updateImage(Integer id, MultipartFile image) {
+        return new byte[0];
+    }
+
+
 //    @Override
 //    public Ads getAdsMe() {
 //        String username = SecurityContextHolder.getContext().getAuthentication().getName();
