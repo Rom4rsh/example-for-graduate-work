@@ -37,40 +37,4 @@ public class ExtendedAd {
 
     @Schema(description = "заголовок объявления",example = "велосипед")
     private String title;
-
-
-
 }
-
-//ExtendedAd:
-//type: object
-//properties:
-//pk:
-//type: integer
-//format: int32
-//description: 'id объявления'
-//authorFirstName:
-//type: string
-//description: 'имя автора объявления'
-//authorLastName:
-//type: string
-//description: 'фамилия автора объявления'
-//description:
-//type: string
-//description: 'описание объявления'
-//email:
-//type: string
-//description: 'логин автора объявления'
-//image:
-//type: string
-//description: 'ссылка на картинку объявления'
-//phone:
-//type: string
-//description: 'телефон автора объявления'
-//price:
-//type: integer
-//format: int32
-//description: 'цена объявления'
-//title:
-//type: string
-//description: 'заголовок объявления'
