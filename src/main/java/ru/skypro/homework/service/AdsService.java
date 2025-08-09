@@ -7,6 +7,8 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 
+import java.util.List;
+
 public interface AdsService {
 
     Ads getAllAds();

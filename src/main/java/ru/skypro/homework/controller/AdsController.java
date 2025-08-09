@@ -1,22 +1,20 @@
 package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
-import java.util.NoSuchElementException;
 
-import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -28,11 +26,22 @@ public class AdsController {
 
     private final AdsService adsService;
 
-    @Operation(summary = "Получение всех объявлений")
+    @Operation(summary = "Получить все объявления",
+            description = "Возвращает список объявлений",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Список объявлений",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Ads.class)
+                            )
+                    )
+            })
     @GetMapping
-    ResponseEntity<Ads> getAllAds() {
-        adsService.getAllAds();
-        return ResponseEntity.ok().build();
+    @ResponseStatus(HttpStatus.OK)
+    public Ads getAllAds() {
+        return adsService.getAllAds();
     }
 
     @Operation(summary = "Добавление объявления")
@@ -41,69 +50,60 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(adsService.addAds(image, properties));
     }
 
-    @Operation(summary = "Получение информации об объявлении")
+    @Operation(summary = "Получение информации об объявлении",
+                responses = {
+                        @ApiResponse(responseCode = "200", description = "OK"),
+                        @ApiResponse(responseCode = "404", description = "Not Found")
+                })
     @GetMapping("/{id}")
-    ResponseEntity<ExtendedAd> getAds(@PathVariable Integer id) {
-        try {
-            ExtendedAd ad = adsService.getAds(id);
-            return ResponseEntity.ok(ad);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    @ResponseStatus(HttpStatus.OK)
+    public ExtendedAd getAds(@PathVariable Integer id) {
+        return adsService.getAds(id);
     }
 
-    @Operation(summary = "Удаление объявления")
+    @Operation(summary = "Удаление объявления",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "No Content"),
+                    @ApiResponse(responseCode = "404", description = "Not Found")
+            })
     @DeleteMapping("/{id}")
-    ResponseEntity<Void> removeAd(@PathVariable Integer id) {
-        try {
-            adsService.removeAd(id);
-            return ResponseEntity.noContent().build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeAd(@PathVariable Integer id) {
+        adsService.removeAd(id);
     }
 
-    @Operation(summary = "Обновление информации об объявлении")
+    @Operation(summary = "Обновление информации об объявлении",
+            responses = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
     @PatchMapping("/{id}")
-    ResponseEntity<Ad> updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd updateAd) {
-        try {
-            Ad updatedAd = adsService.updateAds(id, updateAd);
-            return ResponseEntity.ok(updatedAd);
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    @ResponseStatus(HttpStatus.OK)
+    public Ad updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd updateAd) {
+        Ad updatedAd = adsService.updateAds(id, updateAd);
+        return updatedAd;
     }
 
-    @Operation(summary = "Получение объявлений авторизованного пользователя")
+    @Operation(summary = "Получение объявлений авторизованного пользователя",
+            responses = @ApiResponse(responseCode = "200",
+            description = "OK",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Ads.class))))
     @GetMapping("/me")
-    ResponseEntity<Ads> getAdsMe() {
-        return ResponseEntity.ok(adsService.getAdsMe());
+    @ResponseStatus(HttpStatus.OK)
+    public Ads getAdsMe() {
+        return adsService.getAdsMe();
     }
 
-    @Operation(summary = "Обновление картинки пользователя")
-    @PatchMapping("/{id}/image")
-    ResponseEntity<byte[]> updateImage(@RequestPart MultipartFile image, @PathVariable Integer id) {
-
-        try {
+    @Operation(summary = "Обновление картинки объявления",
+            responses = @ApiResponse(responseCode = "200",
+                    description = "OK",
+                    content = @Content(mediaType = MediaType.IMAGE_PNG_VALUE)))
+    @PatchMapping(value ="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public byte[] updateImage(@RequestPart MultipartFile image, @PathVariable Integer id) {
             byte[] updateImage = adsService.updateImage(id, image);
-            return ResponseEntity.ok(updateImage);
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        } catch (SecurityException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+            return updateImage;
     }
 }
 // /ads/{id}:

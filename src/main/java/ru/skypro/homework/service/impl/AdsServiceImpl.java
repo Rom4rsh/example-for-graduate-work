@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.service.AdsService;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class AdsServiceImpl implements AdsService {
     public ExtendedAd getAds(Integer id) {
         // Заглушка: "поиск" объявления в БД
         if (id <= 0) {
-            throw new NoSuchElementException("Ad not found");
+            throw new AdNotFoundException("Объявление не найдено");
         }
 
         //Фейковые данные
