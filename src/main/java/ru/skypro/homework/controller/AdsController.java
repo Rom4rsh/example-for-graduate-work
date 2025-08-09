@@ -55,7 +55,7 @@ public class AdsController {
     }
 
     @Operation(summary = "Удаление объявления")
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Void> removeAd(@PathVariable Integer id) {
         try {
             adsService.removeAd(id);
@@ -70,7 +70,7 @@ public class AdsController {
     }
 
     @Operation(summary = "Обновление информации об объявлении")
-    @PatchMapping("{/id}")
+    @PatchMapping("/{id}")
     ResponseEntity<Ad> updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd updateAd) {
         try {
             Ad updatedAd = adsService.updateAds(id, updateAd);

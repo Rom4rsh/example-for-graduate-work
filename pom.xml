@@ -13,8 +13,7 @@
 
   <groupId>ru.skypro</groupId>
   <artifactId>ads</artifactId>
-  <version>0.0.1-SNAPSHOT</version
-  >
+  <version>0.0.1-SNAPSHOT</version>
   <name>Ads application</name>
   <description>Application for managing ads</description>
 
@@ -65,7 +64,7 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.8.0</version> <!-- актуальная на август 2025 -->
+      <version>1.6.15</version>
     </dependency>
   </dependencies>
 

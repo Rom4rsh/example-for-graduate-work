@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CommentsController {
 
-    @Operation(summary = "Получение комментариев объявления")
-    @GetMapping
-    ResponseEntity<>
+   // @Operation(summary = "Получение комментариев объявления")
+   // @GetMapping
+   // ResponseEntity<>
 
 }
