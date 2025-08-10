@@ -15,7 +15,7 @@
   <artifactId>ads</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Ads application</name>
-  <description>Application for managing adDtos</description>
+  <description>Application for managing ads</description>
 
   <properties>
     <java.version>11</java.version>
