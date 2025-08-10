@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
 
 @Slf4j
@@ -58,7 +58,7 @@ public class UsersController {
                             description = "Информация о пользователе получена",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = User.class)
+                                    schema = @Schema(implementation = UserDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -68,8 +68,8 @@ public class UsersController {
             })
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser() {
-        return userService.getCurrentUser();
+    public UserDto getUser(Authentication authentication) {
+        return userService.getCurrentUser(authentication);
     }
 
     @Operation(summary = "Обновление информации об авторизованном пользователе",
@@ -93,8 +93,8 @@ public class UsersController {
             })
     @PatchMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public UpdateUser updateUser(@RequestBody UpdateUser user) {
-        return userService.updateUser(user);
+    public UpdateUser updateUser(@RequestBody UpdateUser user, Authentication authentication) {
+        return userService.updateUser(user, authentication);
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя",
