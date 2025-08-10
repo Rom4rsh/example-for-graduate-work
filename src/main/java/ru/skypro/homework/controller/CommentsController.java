@@ -2,7 +2,6 @@ package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentsService;
@@ -63,7 +62,7 @@ public class CommentsController {
                             description = "Комментарий создан",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -78,7 +77,7 @@ public class CommentsController {
     )
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Comment addComment(
+    public CommentDto addComment(
             @Parameter(description = "ID объявления", required = true) @PathVariable Integer id,
             @RequestBody @Valid CreateOrUpdateComment commentDto,
             Authentication authentication
@@ -126,7 +125,7 @@ public class CommentsController {
                             description = "Комментарий обновлен",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Comment.class)
+                                    schema = @Schema(implementation = CommentDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -145,7 +144,7 @@ public class CommentsController {
     )
     @PatchMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public Comment updateComment(
+    public CommentDto updateComment(
             @Parameter(description = "ID объявления", required = true) @PathVariable Integer id,
             @Parameter(description = "ID комментария", required = true) @PathVariable Integer commentId,
             @RequestBody @Valid CreateOrUpdateComment updatedComment

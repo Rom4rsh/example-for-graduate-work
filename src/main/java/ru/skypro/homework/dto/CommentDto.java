@@ -9,7 +9,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Comment {
+public class CommentDto {
 
     @Schema(description = "id автора комментария", example = "1234")
     private Integer author;

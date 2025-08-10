@@ -13,7 +13,7 @@ public class Comments {
     @Schema(description = "общее количество комментариев", example = "10")
     private Integer count;
 
-    private List<Comment> results;
+    private List<CommentDto> results;
 }
 //Comments:
 //type: object
@@ -25,4 +25,4 @@ public class Comments {
 //results:
 //type: array
 //items:
-//$ref: '#/components/schemas/Comment'
+//$ref: '#/components/schemas/CommentDto'

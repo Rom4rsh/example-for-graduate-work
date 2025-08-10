@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class UserDto {
     @Schema(description = "id пользователя",example = "123")
     private Integer id;
 

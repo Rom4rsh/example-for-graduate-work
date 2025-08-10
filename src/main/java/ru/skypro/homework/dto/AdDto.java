@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Ad {
+public class AdDto {
 
     @Schema(description = "id автора объявления",example = "1234")
     private Integer author;

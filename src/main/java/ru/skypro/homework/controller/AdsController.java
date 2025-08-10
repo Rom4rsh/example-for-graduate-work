@@ -46,7 +46,7 @@ public class AdsController {
 
     @Operation(summary = "Добавление объявления")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<Ad> addAds(@RequestPart MultipartFile image, @RequestPart CreateOrUpdateAd properties) {
+    ResponseEntity<AdDto> addAds(@RequestPart MultipartFile image, @RequestPart CreateOrUpdateAd properties) {
         return ResponseEntity.status(HttpStatus.CREATED).body(adsService.addAds(image, properties));
     }
 
@@ -79,9 +79,9 @@ public class AdsController {
     })
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Ad updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd updateAd) {
-        Ad updatedAd = adsService.updateAds(id, updateAd);
-        return updatedAd;
+    public AdDto updateAds(@PathVariable Integer id, @RequestBody CreateOrUpdateAd updateAd) {
+        AdDto updatedAdDto = adsService.updateAds(id, updateAd);
+        return updatedAdDto;
     }
 
     @Operation(summary = "Получение объявлений авторизованного пользователя",
