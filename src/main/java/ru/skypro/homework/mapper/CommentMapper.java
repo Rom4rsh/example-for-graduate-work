@@ -1,15 +1,63 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import ru.skypro.homework.dto.AdDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.stereotype.Component;
 import ru.skypro.homework.dto.CommentDto;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.model.Comment;
 
-@Mapper(componentModel = "spring")
-public interface CommentMapper {
-    CommentDto toCommentDto(Comment comment);
+@Component
+public class CommentMapper {
 
-    @Mapping(target = "id", ignore = true)
-    Comment toComment(CommentDto commentDto);
+    @Operation(
+            summary = "Создать Comment из CreateOrUpdateCommentDto",
+            description = "Преобразует DTO для создания/обновления комментария в сущность Comment",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Успешное преобразование",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Comment.class)
+                            )
+                    )
+            }
+    )
+    public Comment createComment(CreateOrUpdateComment dto) {
+        Comment comment = new Comment();
+        comment.setText(dto.getText());
+        comment.setCreatedAt(System.currentTimeMillis());
+        return comment;
+    }
+
+    @Operation(
+            summary = "Конвертировать Comment в CommentDto",
+            description = "Преобразует сущность Comment в DTO для отображения комментария",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Успешное преобразование",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = CommentDto.class)
+                            )
+                    )
+            }
+    )
+    public CommentDto toCommentDto(Comment comment) {
+        CommentDto dto = new CommentDto();
+        dto.setPk(comment.getId());
+        dto.setText(comment.getText());
+        dto.setCreatedAt(comment.getCreatedAt());
+
+        if (comment.getAuthor() != null) {
+            dto.setAuthor(comment.getAuthor().getId());
+            dto.setAuthorFirstName(comment.getAuthor().getFirstName());
+            dto.setAuthorImage(comment.getAuthor().getImagePath());
+        }
+        return dto;
+    }
 }

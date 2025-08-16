@@ -11,8 +11,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Data
 public class CreateOrUpdateComment {
-    @Schema(description = "заголовок объявления", minLength = 8, maxLength = 64, example = "отличное объявление")
-    @NotBlank
+    @Schema(description = "Текст комментария", minLength = 8, maxLength = 64, example = "отличное объявление")
+    @NotBlank(message = "Комментарий не может быть пустым")
     @Size(min = 8, max = 64)
-    private String title;
+    private String text;
 }

@@ -16,8 +16,10 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
 
-@Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+import java.io.IOException;
+
+//@Slf4j
+//@CrossOrigin(value = "http://localhost:3000")
 
 @RestController
 @RequestMapping("/users")
@@ -47,8 +49,8 @@ public class UsersController {
             })
     @PostMapping("/set_password")
     @ResponseStatus(HttpStatus.OK)
-    public void setPassword(@RequestBody NewPassword password) {
-        userService.setPassword(password);
+    public void setPassword(@RequestBody NewPassword password, Authentication authentication) {
+        userService.setPassword(password, authentication);
     }
 
     @Operation(summary = "Получение информации об авторизованном пользователе",
@@ -118,8 +120,8 @@ public class UsersController {
             })
     @PatchMapping("/me/image")
     @ResponseStatus(HttpStatus.OK)
-    public void updateUserImage(@RequestPart("image") MultipartFile image) {
-        userService.updateUserImage(image);
+    public void updateUserImage(@RequestPart("image") MultipartFile image, Authentication authentication) throws IOException {
+        userService.updateUserImage(image, authentication);
     }
 }
 

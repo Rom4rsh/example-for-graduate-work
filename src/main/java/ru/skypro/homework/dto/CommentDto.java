@@ -21,7 +21,7 @@ public class CommentDto {
     private String authorFirstName;
 
     @Schema(description = "дата и время создания комментария", example = "00:00:00 01.01.1970", format = "int64",type = "integer")
-    private Instant createdAt;
+    private Long createdAt;
 
     @Schema(description = "id комментария", example = "1234")
     private Integer pk;
