@@ -1,10 +1,13 @@
 package ru.skypro.homework.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,10 +28,15 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/ads")
-@RequiredArgsConstructor
 public class AdsController {
 
     private final AdsService adsService;
+    private final ObjectMapper objectMapper;
+
+    public AdsController(AdsService adsService, ObjectMapper objectMapper) {
+        this.adsService = adsService;
+        this.objectMapper = objectMapper;
+    }
 
     @Operation(summary = "Получить все объявления",
             description = "Возвращает список объявлений",
@@ -47,25 +55,16 @@ public class AdsController {
     public Ads getAllAds() {
         return adsService.getAllAds();
     }
-
     @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Operation(
-            summary = "Добавление объявления",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
-                            schema = @Schema(implementation = CreateAdRequest.class)
-                    )
-            )
-    )
-    public ResponseEntity<AdDto> addAds(
+    public ResponseEntity<AdDto> addAd(
             @RequestPart("image") MultipartFile image,
-            @RequestPart("properties") @Valid CreateOrUpdateAd properties,
+            @RequestPart("properties") String propertiesJson,
             Authentication authentication
-    ) throws IOException {
+    ) throws JsonProcessingException, IOException {
+        CreateOrUpdateAd properties = objectMapper.readValue(propertiesJson, CreateOrUpdateAd.class);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(adsService.addAds(image, properties, authentication));
     }

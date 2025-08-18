@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -100,6 +101,7 @@ public class UsersController {
     }
 
     @Operation(summary = "Обновление аватара авторизованного пользователя",
+            security = @SecurityRequirement(name = "bearerAuth"),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -118,7 +120,7 @@ public class UsersController {
                             description = "Размер файла слишком большой"
                     )
             })
-    @PatchMapping("/me/image")
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void updateUserImage(@RequestPart("image") MultipartFile image, Authentication authentication) throws IOException {
         userService.updateUserImage(image, authentication);
