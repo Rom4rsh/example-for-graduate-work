@@ -12,6 +12,9 @@ import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
+import java.util.Collections;
+import java.util.Map;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 
@@ -39,10 +42,9 @@ public class AuthController {
     )
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public void login(@RequestBody Login login) {
-        if (!authService.login(login.getUsername(), login.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
+    public Map<String, String> login(@RequestBody Login login) {
+        String token = authService.login(login.getUsername(), login.getPassword());
+        return Collections.singletonMap("token", token);
     }
 
     @Operation(

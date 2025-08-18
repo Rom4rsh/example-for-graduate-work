@@ -2,6 +2,8 @@ openapi: 3.0.3
 info:
   title: API Documentation
   version: '1.0'
+security:
+  - bearerAuth: []
 servers:
   - url: http://localhost:8080
 paths:

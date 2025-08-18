@@ -18,4 +18,3 @@ public class Ads {
     private List<AdDto> results;
 
 }
-

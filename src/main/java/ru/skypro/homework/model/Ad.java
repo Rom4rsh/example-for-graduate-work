@@ -65,7 +65,7 @@ public class Ad {
             implementation = User.class,
             accessMode = Schema.AccessMode.READ_ONLY
     )
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
