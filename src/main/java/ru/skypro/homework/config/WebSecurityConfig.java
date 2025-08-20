@@ -33,7 +33,8 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter) throws Exception {
-        http.csrf().and().cors().disable()
+        http.csrf().disable()
+                .cors(withDefaults())
                 .authorizeHttpRequests(authz -> authz
                         .mvcMatchers(AUTH_WHITELIST).permitAll()
                         .mvcMatchers("/ads/", "/users/").authenticated()

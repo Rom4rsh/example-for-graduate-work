@@ -23,9 +23,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 
-//@Slf4j
-//@CrossOrigin(value = "http://localhost:3000")
-
 @RestController
 @RequestMapping("/ads")
 public class AdsController {

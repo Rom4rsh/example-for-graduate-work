@@ -18,8 +18,6 @@ import ru.skypro.homework.service.CommentsService;
 
 import javax.validation.Valid;
 
-//@Slf4j
-//@CrossOrigin(value = "http://localhost:3000")
 
 @RestController
 @RequiredArgsConstructor
