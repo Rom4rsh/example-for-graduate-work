@@ -56,4 +56,14 @@ public class JwtToken {
             return false;
         }
     }
+
+    //получение username по токену
+    public String getUsername(String token) {
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            return signedJWT.getJWTClaimsSet().getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid JWT token", e);
+        }
+    }
 }
