@@ -55,7 +55,8 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public void deleteComment(Integer adId, Integer commentId) {
-
+        Comment comment = getCommentIfExistsAndBelongsToAd(adId, commentId);
+        commentRepository.delete(comment);
     }
 
     @Transactional
