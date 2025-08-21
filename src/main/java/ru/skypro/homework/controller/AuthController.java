@@ -15,6 +15,11 @@ import ru.skypro.homework.service.AuthService;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Контроллер аутентификации и регистрации пользователей.
+ * <p>
+ * Предоставляет эндпоинты для входа в систему и создания новой учетной записи.
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 
@@ -24,6 +29,12 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * Выполняет аутентификацию пользователя по логину и паролю.
+     *
+     * @param login объект {@link Login}, содержащий логин (email) и пароль
+     * @return карту с токеном аутентификации, ключ: "token"
+     */
     @Operation(
             summary = "Аутентификация пользователя",
             description = "Проверка учетных данных пользователя и вход в систему",
@@ -46,7 +57,11 @@ public class AuthController {
         String token = authService.login(login.getUsername(), login.getPassword());
         return Collections.singletonMap("token", token);
     }
-
+    /**
+     * Регистрирует нового пользователя в системе.
+     *
+     * @param register объект {@link Register}, содержащий данные нового пользователя
+     */
     @Operation(
             summary = "Регистрация нового пользователя",
             description = "Создание новой учетной записи пользователя",

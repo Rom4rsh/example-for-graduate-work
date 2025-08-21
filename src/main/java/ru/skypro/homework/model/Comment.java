@@ -7,6 +7,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * Сущность комментария к объявлению.
+ * <p>
+ * Содержит текст комментария, дату создания, ссылку на объявление и автора.
+ */
 @Schema(description = "Сущность комментария к объявлению")
 @Entity
 @Table(name = "comments")
@@ -15,6 +20,11 @@ import javax.persistence.*;
 @Setter
 public class Comment {
 
+    /**
+     * Уникальный идентификатор комментария.
+     * <p>
+     * Автоматически генерируется при сохранении в базе данных.
+     */
     @Schema(
             description = "Уникальный идентификатор комментария",
             example = "1",
@@ -24,6 +34,11 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * Текст комментария.
+     * <p>
+     * Максимальная длина — 64 символа.
+     */
     @Schema(
             description = "Текст комментария",
             example = "Этот товар в отличном состоянии!",
@@ -33,6 +48,9 @@ public class Comment {
     @Column(nullable = false, length = 64)
     private String text;
 
+    /**
+     * Дата и время создания комментария в миллисекундах с эпохи Unix.
+     */
     @Schema(
             description = "Дата и время создания комментария в миллисекундах с эпохи Unix",
             example = "1678901234567",
@@ -41,6 +59,11 @@ public class Comment {
     @Column(name = "created_at", nullable = false)
     private Long createdAt;
 
+    /**
+     * Объявление, к которому относится комментарий.
+     * <p>
+     * Ссылка на объект {@link Ad}.
+     */
     @Schema(
             description = "Объявление, к которому относится комментарий",
             implementation = Ad.class,
@@ -50,6 +73,11 @@ public class Comment {
     @JoinColumn(name = "ad_id", nullable = false)
     private Ad ad;
 
+    /**
+     * Автор комментария.
+     * <p>
+     * Ссылка на объект {@link User}, который создал комментарий.
+     */
     @Schema(
             description = "Автор комментария",
             implementation = User.class,
