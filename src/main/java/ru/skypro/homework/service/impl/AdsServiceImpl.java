@@ -63,9 +63,10 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public void removeAd(Integer id) {
+    public void removeAd(Integer id) throws IOException {
         Ad ad = adRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Ad not found"));
+        imageService.deleteImage(ad.getImagePath());
         adRepository.delete(ad);
     }
 

@@ -59,7 +59,7 @@ public class ImageServiceImpl implements ImageService {
 
 
     public void deleteImage(String imagePath) throws IOException {
-        Path fullPath = Paths.get(uploadDirectory, imagePath);
+        Path fullPath = Paths.get(uploadDirectory, imagePath.substring(1).replace("/","\\"));
         if (Files.exists(fullPath)) {
             Files.delete(fullPath);
         }

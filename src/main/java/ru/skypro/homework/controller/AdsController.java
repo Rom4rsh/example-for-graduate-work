@@ -111,7 +111,7 @@ public class AdsController {
             })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void removeAd(@PathVariable Integer id) {
+    public void removeAd(@PathVariable Integer id) throws IOException {
         adsService.removeAd(id);
     }
     /**

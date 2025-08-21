@@ -43,7 +43,7 @@ public interface AdsService {
      *
      * @param id уникальный идентификатор объявления
      */
-    void removeAd(Integer id);
+    void removeAd(Integer id) throws IOException;
 
     /**
      * Обновляет данные объявления.
