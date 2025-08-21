@@ -15,6 +15,13 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Сущность пользователя системы.
+ * <p>
+ * Содержит личные данные пользователя, логин и пароль для аутентификации,
+ * роль, путь к аватару, а также связанные объявления и комментарии.
+ * Реализует интерфейс {@link UserDetails} для интеграции с Spring Security.
+ */
 @Schema(description = "Сущность пользователя системы")
 @Entity
 @Table(name = "users")
@@ -24,6 +31,11 @@ import java.util.List;
 @Data
 public class User implements UserDetails {
 
+    /**
+     * Уникальный идентификатор пользователя.
+     * <p>
+     * Автоматически генерируется при сохранении в базе данных.
+     */
     @Schema(
             description = "Уникальный идентификатор пользователя",
             example = "1",
@@ -33,6 +45,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * Логин пользователя (email).
+     * <p>
+     * Должен быть уникальным и не пустым.
+     */
     @Schema(
             description = "Логин пользователя (email)",
             example = "user@example.com",
@@ -42,6 +59,11 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true, length = 32)
     private String username;
 
+    /**
+     * Пароль пользователя.
+     * <p>
+     * Хранится в зашифрованном виде. Доступен только для записи.
+     */
     @Schema(
             description = "Пароль пользователя",
             example = "1234567890",
@@ -52,6 +74,9 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 128)
     private String password;
 
+    /**
+     * Имя пользователя.
+     */
     @Schema(
             description = "Имя пользователя",
             example = "Иван",
@@ -61,6 +86,9 @@ public class User implements UserDetails {
     @Column(name = "first_name", nullable = false, length = 16)
     private String firstName;
 
+    /**
+     * Фамилия пользователя.
+     */
     @Schema(
             description = "Фамилия пользователя",
             example = "Иванов",
@@ -70,6 +98,9 @@ public class User implements UserDetails {
     @Column(name = "last_name", nullable = false, length = 16)
     private String lastName;
 
+    /**
+     * Телефон пользователя в формате +7 XXX XXX-XX-XX.
+     */
     @Schema(
             description = "Телефон пользователя в формате +7 XXX XXX-XX-XX",
             example = "+7 999 99-99-99",
@@ -78,6 +109,11 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String phone;
 
+    /**
+     * Роль пользователя в системе.
+     * <p>
+     * Используется для определения прав доступа.
+     */
     @Schema(
             description = "Роль пользователя в системе",
             example = "USER",
@@ -88,6 +124,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    /**
+     * Путь к аватару пользователя.
+     * <p>
+     * Может использоваться для формирования ссылки на изображение.
+     */
     @Schema(
             description = "Путь к аватару пользователя",
             example = "/users/images/1",
@@ -96,6 +137,11 @@ public class User implements UserDetails {
     @Column(name = "image_path")
     private String imagePath;
 
+    /**
+     * Список объявлений пользователя.
+     * <p>
+     * Связь один-ко-многим с {@link Ad}.
+     */
     @Schema(
             description = "Объявления пользователя",
             implementation = Ad.class,
@@ -104,6 +150,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Ad> ads;
 
+    /**
+     * Список комментариев пользователя.
+     * <p>
+     * Связь один-ко-многим с {@link Comment}.
+     */
     @Schema(
             description = "Комментарии пользователя",
             implementation = Comment.class,
@@ -112,26 +163,51 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    /**
+     * Возвращает коллекцию прав пользователя для Spring Security.
+     *
+     * @return список {@link GrantedAuthority} с ролью пользователя
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
 
+    /**
+     * Проверяет, не истёк ли срок действия аккаунта.
+     *
+     * @return true всегда, аккаунт не истёк
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    /**
+     * Проверяет, не заблокирован ли аккаунт.
+     *
+     * @return true всегда, аккаунт не заблокирован
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    /**
+     * Проверяет, не истёк ли срок действия учетных данных.
+     *
+     * @return true всегда, учетные данные действительны
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    /**
+     * Проверяет, активен ли аккаунт.
+     *
+     * @return true всегда, аккаунт активен
+     */
     @Override
     public boolean isEnabled() {
         return true;

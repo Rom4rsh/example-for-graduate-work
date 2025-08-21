@@ -17,6 +17,12 @@ import ru.skypro.homework.service.CommentsService;
 
 import javax.validation.Valid;
 
+/**
+ * Контроллер для работы с комментариями к объявлениям.
+ * <p>
+ * Предоставляет эндпоинты для получения всех комментариев объявления,
+ * добавления нового комментария, удаления и обновления существующих комментариев.
+ */
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +30,12 @@ import javax.validation.Valid;
 public class CommentsController {
 
     private final CommentsService commentsService;
-
+    /**
+     * Получает все комментарии для указанного объявления.
+     *
+     * @param id идентификатор объявления
+     * @return объект {@link Comments}, содержащий список комментариев
+     */
     @Operation(
             summary = "Получить все комментарии объявления",
             description = "Возвращает список всех комментариев для указанного объявления",
@@ -49,7 +60,14 @@ public class CommentsController {
     public Comments getComments(@Parameter(description = "ID объявления", required = true) @PathVariable Integer id) {
         return commentsService.getCommentsByAdId(id);
     }
-
+    /**
+     * Добавляет новый комментарий к указанному объявлению.
+     *
+     * @param id идентификатор объявления
+     * @param commentDto объект {@link CreateOrUpdateComment} с текстом комментария
+     * @param authentication данные авторизованного пользователя
+     * @return объект {@link CommentDto} с информацией о созданном комментарии
+     */
     @Operation(
             summary = "Добавить комментарий",
             description = "Добавляет новый комментарий к указанному объявлению",
@@ -81,7 +99,12 @@ public class CommentsController {
     ) {
         return commentsService.addComment(id, commentDto, authentication);
     }
-
+    /**
+     * Удаляет комментарий по его ID из указанного объявления.
+     *
+     * @param id идентификатор объявления
+     * @param commentId идентификатор комментария
+     */
     @Operation(
             summary = "Удалить комментарий",
             description = "Удаляет комментарий по его ID из указанного объявления",
@@ -112,7 +135,14 @@ public class CommentsController {
     ) {
         commentsService.deleteComment(id, commentId);
     }
-
+    /**
+     * Обновляет текст указанного комментария.
+     *
+     * @param id идентификатор объявления
+     * @param commentId идентификатор комментария
+     * @param updatedComment объект {@link CreateOrUpdateComment} с новым текстом комментария
+     * @return объект {@link CommentDto} с обновленным комментарием
+     */
     @Operation(
             summary = "Обновить комментарий",
             description = "Обновляет текст указанного комментария",

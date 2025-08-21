@@ -3,13 +3,9 @@ package ru.skypro.homework.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 
-import javax.validation.Valid;
 import java.io.IOException;
 
+/**
+ * Контроллер для работы с объявлениями.
+ * <p>
+ * Предоставляет CRUD-операции для объявлений:
+ * получение всех объявлений, добавление нового, обновление, удаление,
+ * получение объявлений текущего пользователя и обновление изображения объявления.
+ */
 
 @RestController
 @RequestMapping("/ads")
@@ -35,6 +37,11 @@ public class AdsController {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * Получает список всех объявлений.
+     *
+     * @return объект {@link Ads}, содержащий все объявления
+     */
     @Operation(summary = "Получить все объявления",
             description = "Возвращает список объявлений",
             responses = {
@@ -52,6 +59,16 @@ public class AdsController {
     public Ads getAllAds() {
         return adsService.getAllAds();
     }
+    /**
+     * Создаёт новое объявление с изображением.
+     *
+     * @param image изображение для объявления
+     * @param propertiesJson JSON-строка с данными объявления ({@link CreateOrUpdateAd})
+     * @param authentication данные об авторизованном пользователе
+     * @return объект {@link AdDto}, представляющий созданное объявление
+     * @throws JsonProcessingException если возникла ошибка обработки JSON
+     * @throws IOException если возникла ошибка при сохранении изображения
+     */
     @PostMapping(
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -66,7 +83,12 @@ public class AdsController {
                 .body(adsService.addAds(image, properties, authentication));
     }
 
-
+    /**
+     * Получает расширенную информацию об объявлении по его идентификатору.
+     *
+     * @param id уникальный идентификатор объявления
+     * @return объект {@link ExtendedAd} с полной информацией об объявлении
+     */
     @Operation(summary = "Получение информации об объявлении",
                 responses = {
                         @ApiResponse(responseCode = "200", description = "OK"),
@@ -77,7 +99,11 @@ public class AdsController {
     public ExtendedAd getAds(@PathVariable Integer id) {
         return adsService.getExtendedAd(id);
     }
-
+    /**
+     * Удаляет объявление по идентификатору.
+     *
+     * @param id уникальный идентификатор объявления
+     */
     @Operation(summary = "Удаление объявления",
             responses = {
                     @ApiResponse(responseCode = "204", description = "No Content"),
@@ -88,7 +114,13 @@ public class AdsController {
     public void removeAd(@PathVariable Integer id) {
         adsService.removeAd(id);
     }
-
+    /**
+     * Обновляет данные объявления.
+     *
+     * @param id идентификатор обновляемого объявления
+     * @param updateAd объект {@link CreateOrUpdateAd}, содержащий новые данные объявления
+     * @return объект {@link AdDto}, представляющий обновлённое объявление
+     */
     @Operation(summary = "Обновление информации об объявлении",
             responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -100,7 +132,12 @@ public class AdsController {
         AdDto updatedAdDto = adsService.updateAd(id, updateAd);
         return updatedAdDto;
     }
-
+    /**
+     * Получает все объявления текущего авторизованного пользователя.
+     *
+     * @param authentication данные об авторизованном пользователе
+     * @return объект {@link Ads}, содержащий объявления текущего пользователя
+     */
     @Operation(summary = "Получение объявлений авторизованного пользователя",
             responses = @ApiResponse(responseCode = "200",
             description = "OK",
@@ -111,7 +148,14 @@ public class AdsController {
     public Ads getAdsMe(Authentication authentication) {
         return adsService.getAdsMe(authentication);
     }
-
+    /**
+     * Обновляет изображение объявления.
+     *
+     * @param image новое изображение объявления
+     * @param id идентификатор объявления, для которого обновляется изображение
+     * @return массив байт с новым изображением
+     * @throws IOException если возникла ошибка при обработке изображения
+     */
     @Operation(summary = "Обновление картинки объявления",
             responses = @ApiResponse(responseCode = "200",
                     description = "OK",
@@ -123,30 +167,3 @@ public class AdsController {
             return updateImage;
     }
 }
-// /ads/{id}:
-//get:
-//tags:
-//        - Объявления
-//summary: 'Получение информации об объявлении'
-//operationId: getAds
-//parameters:
-//        - name: id
-//in: path
-//required: true
-//schema:
-//type: integer
-//format: int32
-//responses:
-//        '200':
-//description: OK
-//content:
-//application/json:
-//schema:
-//$ref: '#/components/schemas/ExtendedAd'
-//        '401':
-//description: Unauthorized
-//        '404':
-//description: Not found
-//
-
-
