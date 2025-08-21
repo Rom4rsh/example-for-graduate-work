@@ -47,9 +47,11 @@ public class AdsServiceImpl implements AdsService {
         ad.setPrice(properties.getPrice());
         ad.setDescription(properties.getDescription());
 
-        updateImage(ad.getId(), image);
+        Ad savedAd = adRepository.save(ad);
 
-        return adMapper.toAdDto(adRepository.save(ad));
+        updateImage(savedAd.getId(), image);
+
+        return adMapper.toAdDto(adRepository.save(savedAd));
     }
 
     @Override

@@ -18,12 +18,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String saveAdImage(MultipartFile image) throws IOException {
-        return saveImage(image, "ads");
+        return saveImage(image, "adsImage");
     }
 
    @Override
     public String saveUserImage(MultipartFile image) throws IOException {
-        return saveImage(image, "users");
+        return saveImage(image, "usersImage");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ImageServiceImpl implements ImageService {
         Path filePath = uploadPath.resolve(uniqueFilename);
         Files.copy(image.getInputStream(), filePath);
 
-        return Paths.get(subdirectory, uniqueFilename).toString();
+        return "/" + Paths.get(subdirectory, uniqueFilename).toString().replace("\\", "/");
     }
 
 
